@@ -37,5 +37,25 @@ pipeline
                 sh 'docker build -t mithuntechnologies/maven-microservice:$buildNumber .'
             }
         }
+
+        stage('PUsh Docker Image to Docker Hub Registry')
+        {
+            steps()
+            {
+                withCredentials([string(credentialsId: 'Docker_Hub_Password', variable: 'Docker_Hub_Password')])
+                {
+                    sh 'docker login -u mithuntechnologies -p ${Docker_Hub_Password}'
+                }
+                sh 'docker push mithuntechnologies/maven-microservice:$buildNumber'
+            }
+        }
+
+        stage('Remove Docker Image Locally in Jenkins')
+        {
+            steps()
+            {
+                sh 'docker rmi -f mithuntechnologies/maven-microservice:$buildNumber'
+            }
+        }
     }
 }
