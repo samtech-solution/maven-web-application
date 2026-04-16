@@ -1,0 +1,41 @@
+pipeline
+{
+    agent any
+
+    tools
+    {
+        maven 'Maven_3.9.9'
+    }
+
+    environment
+    {
+        buildNumber = "${BUILD_NUMBER}"
+    }
+
+    stages
+    {
+        stage('Checkout Code from GitHub')
+        {
+            steps()
+            {
+                git branch: 'DevOpsDecemberBranch', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+            }
+        }
+
+        stage('Build Maven Artifact')
+        {
+            steps()
+            {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Build Docker Image')
+        {
+            steps()
+            {
+                sh 'docker build -t mithuntechnologies/maven-microservice:$buildNumber .'
+            }
+        }
+    }
+}
