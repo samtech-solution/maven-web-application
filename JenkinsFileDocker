@@ -18,7 +18,7 @@ pipeline
         {
             steps()
             {
-                git branch: 'DevOpsDecemberBranch', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+                git branch: 'DevOpsDecemberBatch', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
             }
         }
 
