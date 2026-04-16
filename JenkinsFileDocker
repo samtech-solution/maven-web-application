@@ -38,7 +38,7 @@ pipeline
             }
         }
 
-        stage('PUsh Docker Image to Docker Hub Registry')
+        stage('Push Docker Image to Docker Hub Registry')
         {
             steps()
             {
