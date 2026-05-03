@@ -96,14 +96,14 @@
 	
 	    <repository>
 	      <id>nexus</id>
-	      <name>Mithun Technologies Releases Nexus Repository</name>
-	      <url>http://172.31.8.97:9980/mithuntechnologies/repository/amazon-release/</url>
+	      <name>ExcelBank Releases Nexus Repository</name>
+	      <url>http://172.31.80.120:8081/repository/ExcelBank-release/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
-	      <name>Mithun Technologies Snapshot Nexus Repository </name>
-	      <url>http://172.31.8.97:9980/mithuntechnologies/repository/amazon-snapshot/</url>
+	      <name>ExcelBank Snapshot Nexus Repository </name>
+	      <url>http://172.31.80.120:8081/repository/ExcelBank-snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
