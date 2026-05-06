@@ -1,35 +1,50 @@
 node {
 
     def mavenHome = tool name: 'maven3'
-    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '3')), pipelineTriggers([pollSCM('* * * * *')])])
 
-    stage('CheckOutCode') {
-        git branch: 'development', credentialsId: 'git-credential', url: 'https://github.com/samtech-solution/maven-web-application.git'
-    }
+    properties([
+        buildDiscarder(
+            logRotator(
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '5',
+                daysToKeepStr: '',
+                numToKeepStr: '3'
+            )
+        ),
+        pipelineTriggers([
+            pollSCM('* * * * *')
+        ])
+    ])
 
-    stage('Build') {
-        sh "${mavenHome}/bin/mvn clean package"
-    }
-/*
-    stage('ExecuteSonarQubeReport') {
-        sh "${mavenHome}/bin/mvn clean sonar:sonar"
-    }
-*/
-    stage('UploadArtifactIntoNexus') {
-        sh "${mavenHome}/bin/mvn clean deploy"
-    }
-slackSend channel: '#k8s-notification',
+    try {
+        stage('CheckOutCode') {
+            git branch: 'development', credentialsId: 'git-credential', url: 'https://github.com/samtech-solution/maven-web-application.git'
+        }
+
+        stage('Build') {
+            sh "${mavenHome}/bin/mvn clean package"
+        }
+
+        /*
+        stage('ExecuteSonarQubeReport') {
+            sh "${mavenHome}/bin/mvn clean sonar:sonar"
+        }
+        */
+
+        stage('UploadArtifactIntoNexus') {
+            sh "${mavenHome}/bin/mvn clean deploy"
+        }
+
+        slackSend channel: '#k8s-notification',
                   color: 'good',
                   message: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} completed successfully. ${env.BUILD_URL}"
 
     } catch (Exception e) {
+
         slackSend channel: '#k8s-notification',
                   color: 'danger',
                   message: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. ${env.BUILD_URL}"
 
         throw e
     }
-
-
-    
 }
