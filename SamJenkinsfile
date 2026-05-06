@@ -18,6 +18,18 @@ node {
     stage('UploadArtifactIntoNexus') {
         sh "${mavenHome}/bin/mvn clean deploy"
     }
+slackSend channel: '#k8s-notification',
+                  color: 'good',
+                  message: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} completed successfully. ${env.BUILD_URL}"
+
+    } catch (Exception e) {
+        slackSend channel: '#k8s-notification',
+                  color: 'danger',
+                  message: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} failed. ${env.BUILD_URL}"
+
+        throw e
+    }
+
 
     
 }
